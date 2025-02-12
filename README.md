@@ -1,0 +1,1 @@
+It sounds like you're looking to build an app that can perform various conversions, such as converting images to text (likely using OCR), generating QR codes, and other types of converters. For this type of app, you can break down the features and their corresponding providers in Flutter.

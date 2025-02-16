@@ -22,12 +22,14 @@ class PrayerTimesScreen extends StatefulWidget {
   const PrayerTimesScreen({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _PrayerTimesScreenState createState() => _PrayerTimesScreenState();
 }
 
 class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
   // Dhaka coordinates (Bangladesh)
   Coordinates coordinates = Coordinates(23.8103, 90.4125);
+
   PrayerTimes? prayerTimes;
 
   @override
@@ -37,6 +39,7 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
     _calculatePrayerTimes();
   }
 
+  final now = DateTime.now();
   void _calculatePrayerTimes() {
     PrayerCalculationParameters params = PrayerCalculationMethod.karachi();
     params.madhab = PrayerMadhab.hanafi;
@@ -44,6 +47,7 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
       coordinates: coordinates,
       calculationParameters: params,
       precision: true,
+      dateTime: now,
       locationName: 'Asia/Dhaka',
     );
     setState(() {});
@@ -58,7 +62,7 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Prayer Times in Dhaka'),
+        title: Text('Prayer Times in ${prayerTimes?.locationName}'),
         backgroundColor: Colors.teal,
       ),
       body: prayerTimes == null
@@ -67,28 +71,45 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
               padding: EdgeInsets.all(16),
               children: [
                 _buildPrayerTimeTile(
-                    'Fajr Start Time', prayerTimes!.fajrStartTime!),
-                _buildPrayerTimeTile('Sunrise Time', prayerTimes!.sunrise!),
+                    'Fajr Start Time',
+                    prayerTimes!.fajrStartTime!,
+                    prayerTimes!.fajrEndTime ?? DateTime.now()),
+                _buildPrayerTimeTile('Sunrise Time', prayerTimes!.sunrise!,
+                    prayerTimes!.sunrise ?? DateTime.now()),
                 _buildPrayerTimeTile(
-                    'Dhuhr Start Time', prayerTimes!.dhuhrStartTime!),
+                    'Dhuhr Start Time',
+                    prayerTimes!.dhuhrStartTime!,
+                    prayerTimes!.dhuhrEndTime ?? DateTime.now()),
                 _buildPrayerTimeTile(
-                    'Asr Start Time', prayerTimes!.asrStartTime!),
+                    'Asr Start Time',
+                    prayerTimes!.asrStartTime!,
+                    prayerTimes!.asrEndTime ?? DateTime.now()),
                 _buildPrayerTimeTile(
-                    'Maghrib Start Time', prayerTimes!.maghribStartTime!),
+                    'Maghrib Start Time',
+                    prayerTimes!.maghribStartTime!,
+                    prayerTimes!.maghribEndTime ?? DateTime.now()),
                 _buildPrayerTimeTile(
-                    'Isha Start Time', prayerTimes!.ishaStartTime!),
+                    'Isha Start Time',
+                    prayerTimes!.ishaStartTime!,
+                    prayerTimes!.ishaEndTime ?? DateTime.now()),
               ],
             ),
     );
   }
 
-  Widget _buildPrayerTimeTile(String prayerName, DateTime prayerTime) {
+  Widget _buildPrayerTimeTile(
+      String prayerName, DateTime prayerStartTime, DateTime prayerEndTime) {
     return Card(
       margin: EdgeInsets.symmetric(vertical: 8),
       child: ListTile(
         title: Text(prayerName),
-        subtitle:
-            Text(_formatTime(prayerTime)), // Display time in 12-hour format
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Start: ${_formatTime(prayerStartTime)}'),
+            Text('End: ${_formatTime(prayerEndTime)}'),
+          ],
+        ),
         leading: Icon(Icons.access_time),
       ),
     );

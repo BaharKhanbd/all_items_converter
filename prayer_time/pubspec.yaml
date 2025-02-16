@@ -36,6 +36,10 @@ dependencies:
   cupertino_icons: ^1.0.8
   prayers_times: ^0.0.6
   intl: ^0.20.2
+  geolocator: ^13.0.2
+  geocoding: ^3.0.0
+  permission_handler: ^11.3.1
+  timezone: ^0.9.4
 
 dev_dependencies:
   flutter_test:

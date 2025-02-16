@@ -92,6 +92,12 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
                     'Isha Start Time',
                     prayerTimes!.ishaStartTime!,
                     prayerTimes!.ishaEndTime ?? DateTime.now()),
+                _buildPrayerTimeTile(
+                    'tahajjudEndTime Time',
+                    prayerTimes!.tahajjudEndTime!,
+                    prayerTimes!.tahajjudEndTime ?? DateTime.now()),
+                _buildPrayerTimeTile('Sehri Time', prayerTimes!.sehri!,
+                    prayerTimes!.sehri ?? DateTime.now()),
               ],
             ),
     );
